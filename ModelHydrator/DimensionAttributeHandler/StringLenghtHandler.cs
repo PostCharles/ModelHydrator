@@ -12,15 +12,15 @@ namespace ModelHydrator.DimensionAttributeHandler
     {
         public Type HandledAttribute { get; } = typeof(StringLengthAttribute);
 
-        public PropertyDimension AddDimension(PropertyDimension size, ValidationAttribute attribute)
+        public (int? Min, int? Max) GetDimension(ValidationAttribute attribute)
         {
-            size.SetMax( ((StringLengthAttribute)attribute).MaximumLength );
+            int? max = ( ((StringLengthAttribute)attribute).MaximumLength );
 
-            var min = ((StringLengthAttribute)attribute).MinimumLength;
+            int? min = ((StringLengthAttribute)attribute).MinimumLength;
 
-            if (min > 0) size.SetMin( ((StringLengthAttribute)attribute).MinimumLength );
+            if (min > 0) min = ( ((StringLengthAttribute)attribute).MinimumLength );
 
-            return size;
+            return (min, max);
         }
     }
 }

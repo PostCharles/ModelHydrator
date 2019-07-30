@@ -7,6 +7,6 @@ namespace ModelHydrator.Interfaces
 {
     public interface IDimensionAttributeHandler : IAttributeHandler
     {
-        PropertyDimension AddDimension(PropertyDimension size, object attribute);
+        (int? Min, int? Max) GetDimension(ModelProperty property);
     }
 }

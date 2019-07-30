@@ -12,15 +12,52 @@ namespace ModelHydrator
     public class HydratorBase
     {
 
+        private IEnumerable<ModelProperty> _properties;
+        public IEnumerable<ModelProperty> Properties
+        {
+            get { return _properties ?? (_properties = GetProperties()); }
+            
+        }
+
+
         private readonly Type _modelType;
+        private readonly PropertyDimensionService _dimensionService;
 
         public HydratorBase(Type modelType)
         {
             _modelType = modelType;
-
         }
 
+        private IEnumerable<ModelProperty> GetProperties()
+        {
+            var result = new List<ModelProperty>();
 
+            foreach (var propInfo in _modelType.GetProperties())
+            {
+                var property = new ModelProperty(_modelType, propInfo);
+
+                SetPropertyDimension(property);
+
+                result.Add( property );
+            }
+
+            return result;
+        }
+
+        private void SetPropertyDimension(ModelProperty property)
+        {
+            var handlers = GetHandlers<IDimensionAttributeHandler>();
+
+            foreach (var handler in handlers)
+            {
+                if (property.HasAttribute(handler.HandledAttribute))
+                {
+                    var (min, max) = handler.GetDimension(property);
+                    property.Min = min;
+                    property.Max = max;
+                }
+            }
+        }
 
         private List<T> GetHandlers<T>()
         {
@@ -47,16 +84,11 @@ namespace ModelHydrator
 
         private void PopultateProperties(object instance)
         {
-            foreach (var prop in _modelType.GetProperties())
+            foreach (var prop in Properties)
             {
-                prop.SetValue(instance, Generate(prop));
+                
             }
 
-        }
-
-        private object Generate(PropertyInfo prop)
-        {
-            throw new NotImplementedException();
         }
 
     }
