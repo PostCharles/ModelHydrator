@@ -6,8 +6,8 @@ using System.Text;
 
 namespace ModelHydrator.Interfaces
 {
-    public interface IValidationAttributeHandler : IAttributeHandler
+    public interface IValueAttributeHandler : IAttributeHandler
     {
-        object Generate(ModelProperty property);
+        object GenerateValue(ModelProperty property);
     }
 }

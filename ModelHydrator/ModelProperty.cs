@@ -10,22 +10,19 @@ namespace ModelHydrator
 {
     public class ModelProperty
     {
-
-        private IEnumerable<ValidationAttribute> _validationAttributes;
-        public IEnumerable<ValidationAttribute> ValidationAttributes
-        {
-            get { return _validationAttributes ?? (_validationAttributes = Property.GetValidationAttributes()); }
-        }
-
         public int? Min { get; set; }
         public int? Max { get; set; }
         public Type ParentModel { get; }
         public PropertyInfo Property { get; }
+        public IEnumerable<ValidationAttribute> ValidationAttributes { get; }
+        public bool IsRequired { get { return Min.HasValue || ValidationAttributes.Any(a => a.GetType() == typeof(RequiredAttribute)); } }
 
         public ModelProperty(Type parentModel, PropertyInfo property)
         {
             ParentModel = parentModel;
             Property = property;
+
+            ValidationAttributes = property.GetCustomAttributes(typeof(ValidationAttribute)).ToList().Cast<ValidationAttribute>();
         }
 
         public bool HasAttribute(Type attributeType)
@@ -36,6 +33,11 @@ namespace ModelHydrator
             }
 
             return false;
+        }
+
+        public ValidationAttribute GetAttribute(Type attributeType)
+        {
+            return ValidationAttributes.FirstOrDefault(a => a.GetType() == attributeType);
         }
     }
 }

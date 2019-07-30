@@ -1,4 +1,6 @@
-﻿using ModelHydrator.Interfaces;
+﻿using ModelHydrator.DimensionAttributeHandlers;
+using ModelHydrator.ValueAttributeHandlers;
+using ModelHydrator.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -20,13 +22,25 @@ namespace ModelHydrator
         }
 
 
-        private readonly Type _modelType;
-        private readonly PropertyDimensionService _dimensionService;
+        private IEnumerable<IComparisonAttributeHandler> ComparisonHandlers { get { return _handlerCollection.ComparisonAttributeHandlers;  } }
+        private IEnumerable<IDimensionAttributeHandler> DimensionHandlers { get { return _handlerCollection.DimensionAttributeHandlers; } }
+        private IEnumerable<IValueAttributeHandler> ValueHandlers { get { return _handlerCollection.ValueAttributeHandlers; } }
 
-        public HydratorBase(Type modelType)
+
+
+        private readonly Type _modelType;
+        private readonly IHandlerCollection _handlerCollection;
+        
+        public HydratorBase(Type modelType) : this(modelType, new DefaultHandlerCollection())
+        { }
+
+        public HydratorBase(Type modelType, IHandlerCollection handlerCollection)
         {
             _modelType = modelType;
+            _handlerCollection = handlerCollection;
         }
+
+
 
         private IEnumerable<ModelProperty> GetProperties()
         {
@@ -34,11 +48,14 @@ namespace ModelHydrator
 
             foreach (var propInfo in _modelType.GetProperties())
             {
-                var property = new ModelProperty(_modelType, propInfo);
+                if (propInfo.CanWrite)
+                {
+                    var property = new ModelProperty(_modelType, propInfo);
 
-                SetPropertyDimension(property);
+                    SetPropertyDimension(property);
 
-                result.Add( property );
+                    result.Add(property);
+                }
             }
 
             return result;
@@ -46,32 +63,16 @@ namespace ModelHydrator
 
         private void SetPropertyDimension(ModelProperty property)
         {
-            var handlers = GetHandlers<IDimensionAttributeHandler>();
-
-            foreach (var handler in handlers)
+            foreach (var handler in DimensionHandlers)
             {
                 if (property.HasAttribute(handler.HandledAttribute))
                 {
-                    var (min, max) = handler.GetDimension(property);
-                    property.Min = min;
-                    property.Max = max;
+                    var (min, max) = handler.GetDimension( property.GetAttribute(handler.HandledAttribute) );
+                    if (min.HasValue) property.Min = min;
+                    if (max.HasValue) property.Max = max;
                 }
             }
         }
-
-        private List<T> GetHandlers<T>()
-        {
-            var result = new List<T>();
-
-            var handlerTypes = Assembly.GetExecutingAssembly().GetTypes().Where(t => t.IsAssignableFrom(typeof(T)));
-
-            foreach (var type in handlerTypes) result.Add( (T)Activator.CreateInstance(type) );
-
-            return result;
-        
-        }
-
-
 
         public object GetInstance()
         {
@@ -84,10 +85,11 @@ namespace ModelHydrator
 
         private void PopultateProperties(object instance)
         {
-            foreach (var prop in Properties)
+            foreach (var modelProperty in Properties.Where(p => p.IsRequired) )
             {
-                
-            }
+                var handler = ValueHandlers.First(h => modelProperty.HasAttribute( h.HandledAttribute ) );
+                modelProperty.Property.SetValue(instance, handler.GenerateValue(modelProperty));
+            };
 
         }
 

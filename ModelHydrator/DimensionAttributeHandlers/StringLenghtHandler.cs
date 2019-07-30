@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ModelHydrator.DimensionAttributeHandler
+namespace ModelHydrator.DimensionAttributeHandlers
 {
     public class StringLenghtHandler : IDimensionAttributeHandler
     {
@@ -16,9 +16,12 @@ namespace ModelHydrator.DimensionAttributeHandler
         {
             int? max = ( ((StringLengthAttribute)attribute).MaximumLength );
 
-            int? min = ((StringLengthAttribute)attribute).MinimumLength;
+            int? min = new int?();
 
-            if (min > 0) min = ( ((StringLengthAttribute)attribute).MinimumLength );
+            if (((StringLengthAttribute)attribute).MinimumLength > 0)
+            {
+                min = (((StringLengthAttribute)attribute).MinimumLength);
+            }
 
             return (min, max);
         }
