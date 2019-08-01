@@ -10,7 +10,7 @@ namespace ModelHydrator.ValueAttributeHandlers
     {
         public Type HandledAttribute { get; } = typeof(EmailAddressAttribute);
 
-        public object GenerateValue(ModelProperty property)
+        public object GenerateValidValue(ModelProperty property)
         {
             throw new NotImplementedException();
         }

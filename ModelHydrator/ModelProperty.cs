@@ -13,14 +13,14 @@ namespace ModelHydrator
         public int? Min { get; set; }
         public int? Max { get; set; }
         public Type ParentModel { get; }
-        public PropertyInfo Property { get; }
+        public PropertyInfo PropertyInfo { get; }
         public IEnumerable<ValidationAttribute> ValidationAttributes { get; }
         public bool IsRequired { get { return Min.HasValue || ValidationAttributes.Any(a => a.GetType() == typeof(RequiredAttribute)); } }
 
         public ModelProperty(Type parentModel, PropertyInfo property)
         {
             ParentModel = parentModel;
-            Property = property;
+            PropertyInfo = property;
 
             ValidationAttributes = property.GetCustomAttributes(typeof(ValidationAttribute)).ToList().Cast<ValidationAttribute>();
         }
@@ -38,6 +38,11 @@ namespace ModelHydrator
         public ValidationAttribute GetAttribute(Type attributeType)
         {
             return ValidationAttributes.FirstOrDefault(a => a.GetType() == attributeType);
+        }
+
+        public void SetValue(object instance, object value)
+        {
+            PropertyInfo.SetValue(instance, value);
         }
     }
 }

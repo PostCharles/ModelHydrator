@@ -12,6 +12,7 @@ namespace ModelHydrator
         public ICollection<IComparisonAttributeHandler> ComparisonAttributeHandlers { get; }
         public ICollection<IDimensionAttributeHandler> DimensionAttributeHandlers { get; }
         public ICollection<IValueAttributeHandler> ValueAttributeHandlers { get; }
+        public ICollection<ITypeHandler> TypeHandlers { get; }
 
         public DefaultHandlerCollection()
         {
@@ -28,6 +29,11 @@ namespace ModelHydrator
             ValueAttributeHandlers = new List<IValueAttributeHandler>
             {
                 new EmailAddressHandler()
+            };
+
+            TypeHandlers = new List<ITypeHandler>
+            {
+
             };
         }
     }

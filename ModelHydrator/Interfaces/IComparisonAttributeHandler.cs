@@ -6,6 +6,6 @@ namespace ModelHydrator.Interfaces
 {
     public interface IComparisonAttributeHandler : IAttributeHandler
     {
-        object GetComparisonValue(object instance, ModelProperty property);
+        object GetComparisonValue(ModelProperty property, object instance);
     }
 }

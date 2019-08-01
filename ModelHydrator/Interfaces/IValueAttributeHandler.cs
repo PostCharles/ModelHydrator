@@ -8,6 +8,6 @@ namespace ModelHydrator.Interfaces
 {
     public interface IValueAttributeHandler : IAttributeHandler
     {
-        object GenerateValue(ModelProperty property);
+        object GenerateValidValue(ModelProperty property);
     }
 }

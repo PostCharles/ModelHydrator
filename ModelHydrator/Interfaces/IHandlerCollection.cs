@@ -9,5 +9,6 @@ namespace ModelHydrator.Interfaces
         ICollection<IComparisonAttributeHandler> ComparisonAttributeHandlers { get; }
         ICollection<IDimensionAttributeHandler> DimensionAttributeHandlers { get; }
         ICollection<IValueAttributeHandler> ValueAttributeHandlers { get; }
+        ICollection<ITypeHandler> TypeHandlers { get; }
     }
 }
