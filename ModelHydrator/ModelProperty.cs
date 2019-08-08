@@ -15,7 +15,7 @@ namespace ModelHydrator
         public Type ParentModel { get; }
         public PropertyInfo PropertyInfo { get; }
         public IEnumerable<ValidationAttribute> ValidationAttributes { get; }
-        public bool IsRequired { get { return Min.HasValue || ValidationAttributes.Any(a => a.GetType() == typeof(RequiredAttribute)); } }
+        public bool IsRequired { get { return Min.HasValue || ValidationAttributes.Any(); } }
 
         public ModelProperty(Type parentModel, PropertyInfo property)
         {

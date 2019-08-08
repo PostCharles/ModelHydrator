@@ -4,6 +4,7 @@ using ModelHydrator.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using ModelHydrator.TypeHandlers;
 
 namespace ModelHydrator
 {
@@ -16,6 +17,8 @@ namespace ModelHydrator
 
         public DefaultHandlerCollection()
         {
+            var rand = new EnhancedRandom(DateTime.Now.Millisecond);
+
             ComparisonAttributeHandlers = new List<IComparisonAttributeHandler>
             {
                
@@ -28,12 +31,12 @@ namespace ModelHydrator
 
             ValueAttributeHandlers = new List<IValueAttributeHandler>
             {
-                new EmailAddressHandler()
+                new EmailAddressHandler(rand)
             };
 
             TypeHandlers = new List<ITypeHandler>
             {
-
+                new StringHandler(rand)
             };
         }
     }

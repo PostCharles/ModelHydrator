@@ -8,11 +8,31 @@ namespace ModelHydrator.ValueAttributeHandlers
 {
     public class EmailAddressHandler : IValueAttributeHandler
     {
+        private const int DEFAULT_MIN = 5;
+        private const int DEFAULT_MAX = 40;
+
+
+        private EnhancedRandom _random;
+
+        public EmailAddressHandler(EnhancedRandom random)
+        {
+            _random = random;
+        }
+
         public Type HandledAttribute { get; } = typeof(EmailAddressAttribute);
 
         public object GenerateValidValue(ModelProperty property)
         {
-            throw new NotImplementedException();
+            var generatedCharacterCount = _random.NextDimension(property, DEFAULT_MIN, DEFAULT_MAX) - "@.".Length;
+
+            var partLength = generatedCharacterCount / 3;
+
+            var username = _random.NextString(partLength);
+            var domain = _random.NextString(partLength);
+
+            var topLevelDomain = _random.NextString( partLength + (generatedCharacterCount % 3) );
+
+            return $"{username}@{domain}.{topLevelDomain}";
         }
     }
 }

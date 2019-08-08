@@ -19,7 +19,7 @@ namespace ModelHydrator
         public object SetValueOnInstance(object instance)
         {
             var generatedValue = GenerateValue(Property);
-            Property.SetValue(instance, GenerateValue);
+            Property.SetValue(instance, generatedValue);
 
             return instance;
         }

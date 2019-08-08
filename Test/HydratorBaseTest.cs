@@ -27,5 +27,8 @@ namespace Test
 
         [StringLength(USERNAME_MAX, MinimumLength = USERNAME_MIN)]
         public string TextField { get; set; }
+
+        [EmailAddress]
+        public string Empty { get; set; }
     }
 }
