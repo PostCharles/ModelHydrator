@@ -13,12 +13,12 @@ namespace Test.DimensionAttributeHandlerTest
     {
         public const int TEST_MIN = 10;
 
-        public MinLengthAttributeHandler Sut { get; }
+        public MinLengthHandler Sut { get; }
         public MinLengthAttribute MinLengthAttribute { get; }
 
         public MinLengthAttributeHandlerTest()
         {
-            Sut = new MinLengthAttributeHandler();
+            Sut = new MinLengthHandler();
             MinLengthAttribute = new MinLengthAttribute(TEST_MIN);
         }
         

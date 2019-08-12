@@ -2,19 +2,18 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ModelHydrator.DimensionAttributeHandlers
 {
-    public class MaxLengthAttributeHandler : IDimensionAttributeHandler
+    public class MinLengthHandler : IDimensionAttributeHandler
     {
-        public Type HandledAttribute { get; } = typeof(MaxLengthAttribute);
+
+        public Type HandledAttribute { get; } = typeof(MinLengthAttribute);
 
         public (int? Min, int? Max) GetDimension(ValidationAttribute attribute)
         {
-            return (new int?(), ((MaxLengthAttribute)attribute).Length);
+            return ( ((MinLengthAttribute)attribute).Length , new int?() );
         }
     }
 }

@@ -10,7 +10,7 @@ namespace ModelHydrator.ValueAttributeHandlers
     {
         private const int DEFAULT_MIN = 5;
         private const int DEFAULT_MAX = 40;
-
+        private const string REQUIRED_EMAIL_CHARACTERS = "@.";
 
         private EnhancedRandom _random;
 
@@ -23,7 +23,8 @@ namespace ModelHydrator.ValueAttributeHandlers
 
         public object GenerateValidValue(ModelProperty property)
         {
-            var generatedCharacterCount = _random.NextDimension(property, DEFAULT_MIN, DEFAULT_MAX) - "@.".Length;
+            var generatedCharacterCount = _random.NextDimension(property, DEFAULT_MIN, DEFAULT_MAX) 
+                                          - REQUIRED_EMAIL_CHARACTERS.Length;
 
             var partLength = generatedCharacterCount / 3;
 

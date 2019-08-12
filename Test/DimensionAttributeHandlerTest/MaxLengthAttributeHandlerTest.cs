@@ -13,12 +13,12 @@ namespace Test.DimensionAttributeHandlerTest
     {
         public const int TEST_MAX = 10;
 
-        public MaxLengthAttributeHandler Sut { get; }
+        public MaxLengthHandler Sut { get; }
         public MaxLengthAttribute MaxLengthAttribute { get; }
 
         public MaxLengthAttributeHandlerTest()
         {
-            Sut = new MaxLengthAttributeHandler();
+            Sut = new MaxLengthHandler();
             MaxLengthAttribute = new MaxLengthAttribute(TEST_MAX);
         }
 

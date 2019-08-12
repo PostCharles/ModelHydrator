@@ -14,13 +14,13 @@ namespace ModelHydrator.DimensionAttributeHandlers
 
         public (int? Min, int? Max) GetDimension(ValidationAttribute attribute)
         {
-            int? max = ( ((StringLengthAttribute)attribute).MaximumLength );
+            int? max = ((StringLengthAttribute)attribute).MaximumLength;
 
             int? min = new int?();
 
             if (((StringLengthAttribute)attribute).MinimumLength > 0)
             {
-                min = (((StringLengthAttribute)attribute).MinimumLength);
+                min = ((StringLengthAttribute)attribute).MinimumLength;
             }
 
             return (min, max);
