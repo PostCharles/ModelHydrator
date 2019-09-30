@@ -8,7 +8,7 @@ namespace ModelHydrator
 {
     public class EnhancedRandom : Random
     {
-        private const string CHARACTER_SET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_-";
+        private const string CHARACTER_SET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
         public EnhancedRandom() : base() {}
         public EnhancedRandom(int seed) : base(seed) {}

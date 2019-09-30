@@ -8,8 +8,9 @@ namespace ModelHydrator.ValueAttributeHandlers
 {
     public class EmailAddressHandler : IValueAttributeHandler
     {
-        private const int DEFAULT_MIN = 5;
-        private const int DEFAULT_MAX = 40;
+        public const string MAX_LENGTH_ERROR = "A valid email can't be created with less than 5 charcters";
+        public const int MIN_LENGTH = 5;
+        public const int DEFAULT_MAX_LENGTH = 40;
         private const string REQUIRED_EMAIL_CHARACTERS = "@.";
 
         private EnhancedRandom _random;
@@ -23,7 +24,12 @@ namespace ModelHydrator.ValueAttributeHandlers
 
         public object GenerateValidValue(ModelProperty property)
         {
-            var generatedCharacterCount = _random.NextDimension(property, DEFAULT_MIN, DEFAULT_MAX) 
+            if (property.Max.HasValue && property.Max.Value < MIN_LENGTH)
+                throw new InvalidOperationException(MAX_LENGTH_ERROR);
+
+            if (property.Min.HasValue && property.Min < MIN_LENGTH) property.Min = MIN_LENGTH;
+
+            var generatedCharacterCount = _random.NextDimension(property, MIN_LENGTH, DEFAULT_MAX_LENGTH) 
                                           - REQUIRED_EMAIL_CHARACTERS.Length;
 
             var partLength = generatedCharacterCount / 3;
